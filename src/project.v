@@ -45,7 +45,7 @@ module tt_um_ringOsc (
 	
 	parameter SIZE = 100; // This needs to be an even number
 	wire [SIZE : 0] w;
-  // wire NANDCONNECT;
+  wire NANDCONNECT;
 
 	genvar i;
 	generate
