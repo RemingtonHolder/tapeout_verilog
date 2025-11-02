@@ -50,11 +50,11 @@ module tt_um_ringOsc (
 	genvar i;
 	generate
 	 for (i=0; i<SIZE; i=i+1) begin : notGates
-		not #(5,5) notGate(w[i+1], w[i]);
+		not notGate(w[i+1], w[i]);
 	 end
-  //  assign w[0] = ~(w[SIZE] & NANDCONNECT);
-  //  assign NANDCONNECT = ~(ui_in[0] & w[0]);
-	 not #(5,5) notGateFirst(w[0], w[SIZE]);
+   assign w[0] = ~(w[SIZE] & NANDCONNECT);
+   assign NANDCONNECT = ~(ui_in[0] & w[0]);
+	 not notGateFirst(w[0], w[SIZE]);
 	endgenerate
 
   assign uo_out[0] = w[SIZE];
