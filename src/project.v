@@ -27,7 +27,7 @@
 
 // endmodule
 
-module ringOsc (ui_in[7:0], uo_out[7:0], uio_in[7:0], uio_out[7:0], uio_oe[7:0], ena, clk, rst_n);
+module tt_um_ringOsc (ui_in[7:0], uo_out[7:0], uio_in[7:0], uio_out[7:0], uio_oe[7:0], ena, clk, rst_n);
 
     input  wire [7:0] ui_in;    // Dedicated inputs
     output wire [7:0] uo_out;   // Dedicated outputs
