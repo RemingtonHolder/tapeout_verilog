@@ -56,8 +56,6 @@ module tt_um_ringOsc (
 	 not #(5,5) notGateFirst(w[0], w[SIZE]);
 	endgenerate
 
-  initial w[0] = 1'b0;
-
   `ifndef SYNTHESIS
     reg seed = 0;
     assign w[0] = seed;
