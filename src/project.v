@@ -59,15 +59,15 @@ module tt_um_ringOsc (
 
   assign uo_out[0] = w[SIZE];
 
-  `ifndef SYNTHESIS
-    reg seed = 0;
-    assign w[0] = seed;
-    initial begin
-      seed = 0;
-      #1 seed = 1;
-      #1 seed = 1'bz;
-    end
-  `endif
+  // `ifndef SYNTHESIS
+  //   reg seed = 0;
+  //   assign w[0] = seed;
+  //   initial begin
+  //     seed = 0;
+  //     #1 seed = 1;
+  //     #1 seed = 1'bz;
+  //   end
+  // `endif
 
   // reg seed = 1'b0;
   //   wire [8:0] w;
