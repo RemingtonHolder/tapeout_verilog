@@ -45,7 +45,7 @@ module tt_um_ringOsc (
 	assign uio_out = 0;
 	assign uio_oe  = 0;
 	
-	parameter SIZE = 8; // This needs to be an even number
+	parameter SIZE = 100; // This needs to be an even number
 	wire [SIZE : 0] w;
 
 	genvar i;
