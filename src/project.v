@@ -51,7 +51,7 @@ module tt_um_ringOsc (
 	 for (i=0; i<SIZE; i=i+1) begin : notGates
 		not #(5,5) notGate(w[i+1], w[i]);
 	 end
-	 not #(5,5) notGateFirst(w[0], w[i]);
+	 not #(5,5) notGateFirst(w[0], w[SIZE]);
 	endgenerate
 
 	assign uo_out[0] = w[0];
