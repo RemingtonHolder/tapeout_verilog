@@ -27,6 +27,8 @@
 
 // endmodule
 
+`timescale 1ns/1ps
+
 module tt_um_ringOsc (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -53,6 +55,8 @@ module tt_um_ringOsc (
 	 end
 	 not #(5,5) notGateFirst(w[0], w[SIZE]);
 	endgenerate
+
+  initial w[0] = 1'b0;
 
 	assign uo_out[0] = w[0];
 
