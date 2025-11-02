@@ -27,8 +27,6 @@
 
 // endmodule
 
-`timescale 1ns/1ps
-
 module tt_um_ringOsc (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -41,20 +39,25 @@ module tt_um_ringOsc (
 );
 
 	// All output pins must be assigned. If not used, assign to 0.
-	assign uo_out[7:1]  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+	assign uo_out[7:1] = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
 	assign uio_out = 0;
 	assign uio_oe  = 0;
 	
 	parameter SIZE = 100; // This needs to be an even number
 	wire [SIZE : 0] w;
+  // wire NANDCONNECT;
 
 	genvar i;
 	generate
 	 for (i=0; i<SIZE; i=i+1) begin : notGates
 		not #(5,5) notGate(w[i+1], w[i]);
 	 end
+  //  assign w[0] = ~(w[SIZE] & NANDCONNECT);
+  //  assign NANDCONNECT = ~(ui_in[0] & w[0]);
 	 not #(5,5) notGateFirst(w[0], w[SIZE]);
 	endgenerate
+
+  assign uo_out[0] = w[SIZE];
 
   `ifndef SYNTHESIS
     reg seed = 0;
