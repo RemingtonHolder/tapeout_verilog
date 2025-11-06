@@ -31,6 +31,19 @@ module amm_inverter (
 
 endmodule
 
+module nand_gate(
+    input wire a,
+    input wire b,
+    output wire y
+);
+  (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
+    .A (a),
+    .B (b),
+    .Y (y)
+  );
+ 
+endmodule
+
 // A chain of inverters.
 module inv_chain #(
     parameter N = 10 // SHOULD BE EVEN.
@@ -50,18 +63,19 @@ endmodule
 
 module tapped_ring (
     input [2:0] tap,
+    input oscEnable,
     output y
 );
     wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
-    (* keep_hierarchy *) amm_inverter      start ( .a(  b0), .y(     b1) ); // If all the counts below are even, this makes it odd.
-    (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(    b11) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(    b21) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(    b31) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c3 ( .a( b31), .y(    b41) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c4 ( .a( b41), .y(    b51) );
-    (* keep_hierarchy *) inv_chain #(.N(50))  c5 ( .a( b51), .y(   b101) );
-    (* keep_hierarchy *) inv_chain #(.N(200)) c6 ( .a(b101), .y(   b301) );
-    (* keep_hierarchy *) inv_chain #(.N(700)) c7 ( .a(b301), .y(  b1001) );
+    (* keep_hierarchy *) nand_gate         start ( .a(  b0), .b( oscEnable)  .y(     b1) ); // If all the counts below are even, this makes it odd.
+    (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
+    (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
+    (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );
+    (* keep_hierarchy *) inv_chain #(.N(10))  c3 ( .a( b31), .y(       b41) );
+    (* keep_hierarchy *) inv_chain #(.N(10))  c4 ( .a( b41), .y(       b51) );
+    (* keep_hierarchy *) inv_chain #(.N(50))  c5 ( .a( b51), .y(      b101) );
+    (* keep_hierarchy *) inv_chain #(.N(200)) c6 ( .a(b101), .y(      b301) );
+    (* keep_hierarchy *)  #(.N(700)) c7 ( .a(b301), .y(  b1001) );
     assign y =  tap == 0 ?   b11:
                 tap == 1 ?   b21:
                 tap == 2 ?   b31:

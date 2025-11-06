@@ -17,9 +17,14 @@ module tt_um_ring_osc3 (
 );
 
   wire osc;
-  tapped_ring tapped_ring ( .tap(ui_in[2:0]), .y(osc) );
+  tapped_ring tapped_ring ( .tap(ui_in[3:1]), .oscEnable(ui_in[0]), .y(osc) );
   assign uo_out[0] = osc;
   reg [6:0] count;
+
+  // WHEN ENABLE (UI_IN[0]) IS ON POS EDGE, "BEING  
+  // TURNED BACK ON" THE COUNTER IS RESET
+  always @(posedge ui_in[0]) count <= 7'b0000000
+
   always @(posedge osc) count <= count + 1;
   assign uo_out[7:1] = count;
 
