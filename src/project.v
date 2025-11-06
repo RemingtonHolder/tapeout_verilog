@@ -35,17 +35,19 @@ module tt_um_ring_osc3 (
   assign uo_out[0] = gated_osc;
   reg [6:0] count;
 
-  // WHEN ENABLE (UI_IN[0]) IS ON POS EDGE, "BEING  
-  // TURNED BACK ON" THE COUNTER IS RESET
+  // Sync counter to osc, with async reset on enable rising edge
   always @(posedge osc or posedge ui_in[0]) begin
-    if (ui_in[0]) begin
-        count <= 7'd0;             // immediately clear on enable rising edge
-    end else begin
-        count <= count + 1'b1;      // normal increment on ring-osc edges
-    end
+      if (ui_in[0]) begin
+          count <= 7'd0;                 // Clear when enable rises
+      end else begin
+          count <= count + 1'b1;         // Increment on osc edges while enabled
+      end
   end
 
-  assign uo_out[7:1] = count;
+  // Output logic:
+  // - When enable is LOW, show the count value
+  // - When enable is HIGH, output 0 (or you could hold previous, your choice)
+  assign uo_out[7:1] = (~ui_in[0]) ? count : 7'b0;
 
   // List all unused inputs to prevent warnings
   wire dummy = &{ui_in, uio_in, ena, rst_n};
