@@ -75,13 +75,13 @@ module tapped_ring (
     (* keep_hierarchy *) inv_chain #(.N(10))  c4 ( .a( b41), .y(       b51) );
     (* keep_hierarchy *) inv_chain #(.N(50))  c5 ( .a( b51), .y(      b101) );
     (* keep_hierarchy *) inv_chain #(.N(200)) c6 ( .a(b101), .y(      b301) );
-    (* keep_hierarchy *) inv_chain #(.N(700)) c7 ( .a(b301), .y(  b1001) );
+    (* keep_hierarchy *) inv_chain #(.N(700)) c7 ( .a(b301), .y(     b1001) );
     assign y =  tap == 0 ?   b21:
                 tap == 1 ?   b31:
                 tap == 2 ?   b41:
                 tap == 3 ?   b51:
                 tap == 4 ?   b101:
                 tap == 5 ?   b301:
-                tap == 6 ?   b1001:
+                tap == 6 ?   b1001;
     assign b0 = y;
 endmodule
