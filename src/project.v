@@ -1,33 +1,11 @@
 /*
- * Copyright (c) 2024 Your Name
+ * Copyright (c) 2024 Anton Maurovic
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Default Example Given
-// `default_nettype none
+`default_nettype none
 
-// module tt_um_example (
-//     input  wire [7:0] ui_in,    // Dedicated inputs
-//     output wire [7:0] uo_out,   // Dedicated outputs
-//     input  wire [7:0] uio_in,   // IOs: Input path
-//     output wire [7:0] uio_out,  // IOs: Output path
-//     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-//     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-//     input  wire       clk,      // clock
-//     input  wire       rst_n     // reset_n - low to reset
-// );
-
-//   // All output pins must be assigned. If not used, assign to 0.
-//   assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-//   assign uio_out = 0;
-//   assign uio_oe  = 0;
-
-//   // List all unused inputs to prevent warnings
-//   wire _unused = &{ena, clk, rst_n, 1'b0};
-
-// endmodule
-
-module tt_um_ringOsc (
+module tt_um_algofoogle_tt09_ring_osc3 (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -38,87 +16,19 @@ module tt_um_ringOsc (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-	// All output pins must be assigned. If not used, assign to 0.
-	assign uo_out[7:1] = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-	assign uio_out = 0;
-	assign uio_oe  = 0;
-	
-	parameter SIZE = 100; // This needs to be an even number
-	wire [SIZE : 0] w;
-  wire NANDCONNECT;
+  wire osc;
+  tapped_ring tapped_ring ( .tap(ui_in[2:0]), .y(osc) );
+  assign uo_out[0] = osc;
+  reg [6:0] count;
+  always @(posedge osc) count <= count + 1;
+  assign uo_out[7:1] = count;
 
-	genvar i;
-	generate
-	 for (i=0; i<SIZE; i=i+1) begin : notGates
-		not notGate(w[i+1], w[i]);
-	 end
-   assign w[0] = ~(w[SIZE] & NANDCONNECT);
-   assign NANDCONNECT = ~(ui_in[0] & w[0]);
-	 not notGateFirst(w[0], w[SIZE]);
-	endgenerate
+  // List all unused inputs to prevent warnings
+  wire dummy = &{ui_in, uio_in, ena, rst_n};
+  assign uio_out[0] = dummy;
+  wire _unused = &{clk, 1'b0};
 
-  assign uo_out[0] = w[SIZE];
-
-  // `ifndef SYNTHESIS
-  //   reg seed = 0;
-  //   assign w[0] = seed;
-  //   initial begin
-  //     seed = 0;
-  //     #1 seed = 1;
-  //     #1 seed = 1'bz;
-  //   end
-  // `endif
-
-  // reg seed = 1'b0;
-  //   wire [8:0] w;
-
-  //   assign w[0] = seed;
-
-  //   initial begin
-  //     seed = 1'b0;
-  //     #1 seed = 1'b1;  // break the symmetry
-  //     #1 seed = 1'bz;  // release, let the loop oscillate
-  // end
-
-
-	// List all unused inputs to prevent warnings
-	wire _unused = &{ena, clk, rst_n, 1'b0};
+  assign uio_oe = 8'b0000_0001;
+  assign uio_out[7:1] = 7'b0000000;
 
 endmodule
-
-// module ringOsc (
-//     input  wire [7:0] ui_in,    // Dedicated inputs
-//     output wire [7:0] uo_out,   // Dedicated outputs
-//     input  wire [7:0] uio_in,   // IOs: Input path
-//     output wire [7:0] uio_out,  // IOs: Output path
-//     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-//     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-//     input  wire       clk,      // clock
-//     input  wire       rst_n     // reset_n - low to reset
-// );
-
-//   // All output pins must be assigned. If not used, assign to 0.
-//   assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-//   assign uio_out = 0;
-//   assign uio_oe  = 0;
-
-//   parameter size = 100;
-
-//   genvar i;
-//   generate
-//     for (i=0; i<SIZE; i=i+1) begin : notGates
-//       not notGate(w[i+1], w[i]);
-//     end
-//     not #(5,5) notGate(w[i+1], w[i]);
-//     not #(5,5) notGateFirst(w[0], w[i]);
-//     not notGateFirst(w[0], w[SIZE]);
-//   endgenerate
-
-//   assign outclk = w[0];
-
-//   // List all unused inputs to prevent warnings
-//   wire _unused = &{ena, clk, rst_n, 1'b0};
-
-// endmodule
-
-
