@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v ring_osc.v
+PROJECT_SOURCES = project.v ring_osc.v sky130_stubs.v
 PDK_ROOT ?= /opt/pdk
 
 ifneq ($(GATES),yes)
@@ -15,7 +15,6 @@ SIM_BUILD				= sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 # VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
 # VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
-VERILOG_SOURCES += sky130_stubs.v
 COMPILE_ARGS 		+= -I$(SRC_DIR)
 
 else
