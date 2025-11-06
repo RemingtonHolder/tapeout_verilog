@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+# in harden.sh, near the top (before it calls the flow)
+export EXTRA_SDC_FILES="$PWD/src/constraints.sdc"
+
 if [ -z "$VIRTUAL_ENV" ]; then echo "VENV is not loaded. Did you remember to run: source ./env-tt09.sh"; exit 1; fi
 if [ -z "$FLOW_ARG"    ]; then echo "FLOW_ARG is not specified. Did you remember to run: source ./env-tt09.sh"; exit 1; fi
 
