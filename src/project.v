@@ -23,7 +23,7 @@ module tt_um_ring_osc3 (
 
   // WHEN ENABLE (UI_IN[0]) IS ON POS EDGE, "BEING  
   // TURNED BACK ON" THE COUNTER IS RESET
-  always @(posedge ui_in[0]) count <= 7'b0000000
+  always @(posedge ui_in[0]) count <= 7'b0000000;
 
   always @(posedge osc) count <= count + 1;
   assign uo_out[7:1] = count;
