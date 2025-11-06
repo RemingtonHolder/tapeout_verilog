@@ -19,34 +19,17 @@
 // );
 // endmodule
 
-// module enable_gate(
-//     input wire a,
-//     input wire b,
-//     output wire y
-// );
-//   (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
-//     .A (a),
-//     .B (b),
-//     .Y (y)
-//   );
- 
-// endmodule
-
 module enable_gate(
     input wire a,
     input wire b,
     output wire y
 );
-    wire const0;
-    sky130_fd_sc_hd__conb_1 uconb (.LO(const0), .HI(/*unused*/));
-
-    // y = en ? fb : 1'b0 ;
-    sky130_fd_sc_hd__mux2_1 umux (
-        .A0 (const0),
-        .A1 (a),
-        .S  (b),
-        .X  (y)
-    );
+  (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
+    .A (a),
+    .B (b),
+    .Y (y)
+  );
+ 
 endmodule
 
 module amm_inverter (
@@ -80,11 +63,10 @@ endmodule
 
 module tapped_ring (
     input [2:0] tap,
-    input oscEnable,
     output y
 );
     wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
-    (* keep = "true", dont_touch = "true" *) enable_gate start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
+    (* keep_hierarchy *) amm_inverter      start ( .a(  b0), .y(       b1) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );

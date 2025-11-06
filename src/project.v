@@ -5,6 +5,19 @@
 
 `default_nettype none
 
+module and_gate(
+    input wire a,
+    input wire b,
+    output wire y
+);
+  (* keep_hierarchy *) sky130_fd_sc_hd__and2_1 sky_and (
+    .A (a),
+    .B (b),
+    .Y (y)
+  );
+ 
+endmodule
+
 module tt_um_ring_osc3 (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -16,9 +29,10 @@ module tt_um_ring_osc3 (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  wire osc;
-  tapped_ring tapped_ring ( .tap(ui_in[3:1]), .oscEnable(ui_in[0]), .y(osc) );
-  assign uo_out[0] = osc;
+  wire osc, gated_osc;
+  tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc));
+  and_gates output_gate ( .a(  osc), .b(ui_in[0]) .y(gated_osc));
+  assign uo_out[0] = gated_osc;
   reg [6:0] count;
 
   // WHEN ENABLE (UI_IN[0]) IS ON POS EDGE, "BEING  
