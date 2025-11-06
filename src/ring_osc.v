@@ -19,19 +19,7 @@
 // );
 // endmodule
 
-module amm_inverter (
-    input   wire a,
-    output  wire y
-);
-
-    (* keep_hierarchy *) sky130_fd_sc_hd__inv_2   sky_inverter (
-        .A  (a),
-        .Y  (y)
-    );
-
-endmodule
-
-module nand_gate(
+module enable_gate(
     input wire a,
     input wire b,
     output wire y
@@ -42,6 +30,18 @@ module nand_gate(
     .Y (y)
   );
  
+endmodule
+
+module amm_inverter (
+    input   wire a,
+    output  wire y
+);
+
+    (* keep_hierarchy *) sky130_fd_sc_hd__inv_2   sky_inverter (
+        .A  (a),
+        .Y  (y)
+    );
+
 endmodule
 
 // A chain of inverters.
@@ -67,7 +67,7 @@ module tapped_ring (
     output y
 );
     wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
-    (* keep_hierarchy *) nand_gate         start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
+    (* keep_hierarchy *) enable_gate         start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
     (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );
