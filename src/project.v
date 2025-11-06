@@ -23,9 +23,14 @@ module tt_um_ring_osc3 (
 
   // WHEN ENABLE (UI_IN[0]) IS ON POS EDGE, "BEING  
   // TURNED BACK ON" THE COUNTER IS RESET
-  // always @(posedge ui_in[0]) count <= 0;
+  always @(posedge osc or posedge ui_in[0]) begin
+    if (ui_in[0]) begin
+        count <= 7'd0;             // immediately clear on enable rising edge
+    end else begin
+        count <= count + 1'b1;      // normal increment on ring-osc edges
+    end
+  end
 
-  always @(posedge osc) count <= count + 1;
   assign uo_out[7:1] = count;
 
   // List all unused inputs to prevent warnings
