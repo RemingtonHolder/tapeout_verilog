@@ -13,7 +13,7 @@ module and_gate(
   (* keep_hierarchy *) sky130_fd_sc_hd__and2_1 sky_and (
     .A (a),
     .B (b),
-    .Y (y)
+    .X (y)
   );
  
 endmodule
