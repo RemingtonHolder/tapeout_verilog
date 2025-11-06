@@ -31,7 +31,7 @@ module tt_um_ring_osc3 (
 
   wire osc, gated_osc;
   tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc));
-  and_gates output_gate ( .a(  osc), .b(ui_in[0]) .y(gated_osc));
+  and_gates output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
   assign uo_out[0] = gated_osc;
   reg [6:0] count;
 
