@@ -66,10 +66,9 @@ module tapped_ring (
     input oscEnable,
     output y
 );
-    wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
+    wire b0, b1, b21, b31, b41, b51, b101, b301, b1001;
     (* keep_hierarchy *) nand_gate         start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
-    (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
+    (* keep_hierarchy *) inv_chain #(.N(20))  c1 ( .a( b1), .y(       b21) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c3 ( .a( b31), .y(       b41) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c4 ( .a( b41), .y(       b51) );
