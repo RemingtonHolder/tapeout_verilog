@@ -67,7 +67,7 @@ module tapped_ring (
     output y
 );
     wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
-    enable_gate start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
+    (* keep = "true", dont_touch = "true" *) enable_gate start ( .a(  b0), .b( oscEnable),  .y(     b1) ); // If all the counts below are even, this makes it odd.
     (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
     (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );
