@@ -33,7 +33,7 @@ else
 # this gets copied in by the GDS action workflow
 VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
-# endif
+endif
 
 # Include the testbench sources:
 VERILOG_SOURCES += $(PWD)/tb.v
