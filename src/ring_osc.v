@@ -19,17 +19,34 @@
 // );
 // endmodule
 
+// module enable_gate(
+//     input wire a,
+//     input wire b,
+//     output wire y
+// );
+//   (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
+//     .A (a),
+//     .B (b),
+//     .Y (y)
+//   );
+ 
+// endmodule
+
 module enable_gate(
     input wire a,
     input wire b,
     output wire y
 );
-  (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
-    .A (a),
-    .B (b),
-    .Y (y)
-  );
- 
+    wire const0;
+    sky130_fd_sc_hd__conb_1 uconb (.LO(const0), .HI(/*unused*/));
+
+    // y = en ? fb : 1'b0 ;
+    sky130_fd_sc_hd__mux2_1 umux (
+        .A0 (const0),
+        .A1 (a),
+        .S  (b),
+        .X  (y)
+    );
 endmodule
 
 module amm_inverter (
