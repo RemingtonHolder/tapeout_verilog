@@ -13,8 +13,21 @@ jobs:
         with:
           submodules: recursive
 
+
       - name: Build GDS
         uses: TinyTapeout/tt-gds-action@ttsky25b
+        env:
+          # point OpenLane/OpenROAD at your constraints file
+          PNR_SDC_FILE: ${{ github.workspace }}/src/constraints.sdc
+          SIGNOFF_SDC_FILE: ${{ github.workspace }}/src/constraints.sdc
+
+          # optional but helpful for a ring osc (prevents “helpful fixes”)
+          CLOCK_PORT: ""
+          RUN_CTS: "0"
+          PL_RESIZER_DESIGN_OPTIMIZATIONS: "0"
+          PL_RESIZER_BUFFER_INPUT_PORTS: "0"
+          PL_RESIZER_BUFFER_OUTPUT_PORTS: "0"
+          RSZ_DONT_TOUCH: "1"
         with:
           pdk: sky130A
 
