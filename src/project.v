@@ -55,10 +55,7 @@ module tt_um_ring_osc3 (
   always @(posedge osc) en_d <= enable;
   wire en_rise = enable & ~en_d;
 
-  reg [6:0] count;
-
-  // Initialize count to zero
-  assign count = 7'd0;
+  reg [6:0] count = 7'd0;
 
   always @(posedge osc) begin
       if (en_rise)           count <= 7'd0;          // clear once on rising edge
