@@ -30,6 +30,16 @@ module tt_um_ring_osc3 (
 );
 
   wire osc, gated_osc;
+
+  `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
+    // behavioral osc for simulation
+    reg osc_r = 1'b0;
+    always #50 osc_r = ~osc_r;  // 100 MHz toggles
+    assign osc = osc_r;
+  `else
+    tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc) );
+  `endif
+
   tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc));
   and_gate output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
   assign uo_out[0] = gated_osc;
