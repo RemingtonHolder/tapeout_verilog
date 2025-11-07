@@ -29,6 +29,8 @@ module tt_um_ring_osc3 (
     input  wire       rst_n     // reset_n - low to reset
 );
 
+  assign uio_oe = 8'b1111_1111;
+
   wire osc, gated_osc;
 
   `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
@@ -65,23 +67,20 @@ module tt_um_ring_osc3 (
   always @(posedge osc) en_d <= enable;
   wire en_rise = enable & ~en_d;
 
-  reg [6:0] count = 7'd0;
+  reg [14:0] count = 15'd0;
 
   always @(posedge osc) begin
-      if (en_rise)           count <= 7'd0;          // clear once on rising edge
+      if (en_rise)           count <= 15'd0;          // clear once on rising edge
       else if (enable)       count <= count + 1'b1;  // count while enabled
       else                   count <= count;         // hold when disabled
   end
 
   // Show the count whenever enable is low (your requirement)
-  assign uo_out[7:1] = (~enable) ? count : 7'b0;
+  assign uo_out[7:1] = (~enable) ? count[6:0] : 7'b0;
+  assign uio_out[7:0] = (~enable) ? count[14:7] : 8'b0;
 
   // List all unused inputs to prevent warnings
   wire dummy = &{ui_in, uio_in, ena, rst_n};
-  assign uio_out[0] = dummy;
   wire _unused = &{clk, 1'b0};
-
-  assign uio_oe = 8'b0000_0001;
-  assign uio_out[7:1] = 7'b0000000;
 
 endmodule
