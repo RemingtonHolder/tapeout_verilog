@@ -27,8 +27,8 @@ COMPILE_ARGS    += -DUSE_POWER_PINS
 COMPILE_ARGS    += -DSIM
 COMPILE_ARGS    += -DUNIT_DELAY=\#1
 
-# this gets copied in by the GDS action workflow
-VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
+# # this gets copied in by the GDS action workflow
+# VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
 # endif
 
