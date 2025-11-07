@@ -34,7 +34,8 @@ module tt_um_ring_osc3 (
   `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
     // behavioral osc for simulation
     reg osc_r = 1'b0;
-    always #50 osc_r = ~osc_r;  // 100 MHz toggles
+    // 80 Picoseconds times 1001 for the number of gates we have - ~ 80ns
+    always #80ns osc_r = ~osc_r;  // 100 MHz toggles
     assign osc = osc_r;
   `else
     tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc) );
