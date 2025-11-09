@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025 Remington Holder, Sherry Yu, Rohin Kumar, Julia Ke, Jeda Williams, Crystal Jiang
+   Build upon Oscillator work by Anton Maurovic
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 `default_nettype none (* keep_hierarchy *)
 
 module amm_inverter (
