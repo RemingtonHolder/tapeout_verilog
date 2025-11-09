@@ -1,11 +1,11 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Another simple TT09 ring oscillator experiment implemented with Verilog
+# Tiny Tapeout Ring Oscillator with Enable and Counter
 
-This contains 1 very basic configurable ring oscillator implemented in Verilog.
+This repo contains the tiny tapeout verilog design of a ring oscillator with enable functionality and a built in 15-bit counter for tallying the number of oscillations
 
 > [!NOTE]
-> See also: [tt09-ring-osc](https://github.com/algofoogle/tt09-ring-osc) and [tt09-ring-osc2](https://github.com/algofoogle/tt09-ring-osc2)
+> The ring oscillator that sits at the center of this design was based upon that done by algofoogle in: [tt09-ring-osc](https://github.com/algofoogle/tt09-ring-osc)
 
 - [Read the documentation for project](docs/info.md)
 
