@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "Verilog ring oscillator V3"
-  author:       "algofoogle (Anton Maurovic)"
-  discord:      "algofoogle"
-  description:  "sky130 inv_2 ring oscillator with externally-selectable length"
+  title:        "Verilog Multistage Oscillator with Enable and Counter"
+  author:       "Remington Holder, Sherry Yu, Rohin Kumar, Julia Ke, Jeda Williams, Crystal Jiang"
+  discord:      ""
+  description:  "ring oscillator with externally-selectable length, enable, and counter"
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
