@@ -16,7 +16,7 @@ module and_gate(
  
 endmodule
 
-module tt_um_ring_osc3 (
+module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -31,15 +31,35 @@ module tt_um_ring_osc3 (
 
   wire osc, gated_osc;
 
-  `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
-    // behavioral osc for simulation
-    reg osc_r = 1'b0;
-    // 80 Picoseconds times 1001 for the number of gates we have - ~ 80ns
-    always #70.007ns osc_r = ~osc_r;  // 100 MHz toggles
-    assign osc = osc_r;
-  `else
-    tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc) );
-  `endif
+  generate
+    if (SIM_BYPASS) begin : g_bypass
+      // synthesis translate_off
+      reg osc_r = 1'b0;
+      always #70 osc_r = ~osc_r;     // 70 ns half-period ≈ 7 MHz, safe for sim
+      assign osc = osc_r;
+      // synthesis translate_on
+    end else begin : g_real
+      `ifdef SIM
+        // synthesis translate_off
+        reg osc_r = 1'b0;
+        always #70 osc_r = ~osc_r;   // for plain RTL sim
+        assign osc = osc_r;
+        // synthesis translate_on
+      `else
+        tapped_ring u_ring (.tap(ui_in[3:1]), .y(osc));  // real ring for hardware
+      `endif
+    end
+  endgenerate
+
+  // `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
+  //   // behavioral osc for simulation
+  //   reg osc_r = 1'b0;
+  //   // 80 Picoseconds times 1001 for the number of gates we have - ~ 80ns
+  //   always #70.007ns osc_r = ~osc_r;  // 100 MHz toggles
+  //   assign osc = osc_r;
+  // `else
+  //   tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc) );
+  // `endif
 
   and_gate output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
   assign uo_out[0] = gated_osc;

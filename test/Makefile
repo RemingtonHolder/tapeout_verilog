@@ -28,6 +28,7 @@ COMPILE_ARGS    += -DFUNCTIONAL
 COMPILE_ARGS    += -DUSE_POWER_PINS
 COMPILE_ARGS    += -DSIM
 COMPILE_ARGS    += -DUNIT_DELAY="\#10"
+COMPILE_ARGS    += -P tt_um_ring_osc3.SIM_BYPASS=1
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
 PDK_VERILOG := $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog
