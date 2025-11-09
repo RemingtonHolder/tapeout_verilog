@@ -67,10 +67,10 @@ module tt_um_ring_osc3 (
   always @(posedge osc) en_d <= enable;
   wire en_rise = enable & ~en_d;
 
-  reg [14:0] count = 15'd0;
+  reg [14:0] count = 15'b0;
 
   always @(posedge osc) begin
-      if (en_rise)           count <= 15'd0;          // clear once on rising edge
+      if (en_rise)           count <= 15'b0;          // clear once on rising edge
       else if (enable)       count <= count + 1'b1;  // count while enabled
       else                   count <= count;         // hold when disabled
   end
