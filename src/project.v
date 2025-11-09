@@ -39,7 +39,7 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
     if (SIM_BYPASS) begin : g_bypass
       // synthesis translate_off
       reg osc_r = 1'b0;
-      always #70 osc_r = ~osc_r;     // 70 ns half-period ≈ 7 MHz, safe for sim
+      always #70 osc_r = ~osc_r;
       assign osc = osc_r;
       // synthesis translate_on
     end else begin : g_real
@@ -55,20 +55,10 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
     end
   endgenerate
 
-  // `ifdef SIM     // <--- define SIM in your iverilog/cocotb build
-  //   // behavioral osc for simulation
-  //   reg osc_r = 1'b0;
-  //   // 80 Picoseconds times 1001 for the number of gates we have - ~ 80ns
-  //   always #70.007ns osc_r = ~osc_r;  // 100 MHz toggles
-  //   assign osc = osc_r;
-  // `else
-  //   tapped_ring tapped_ring ( .tap(ui_in[3:1]), .y(osc) );
-  // `endif
-
   and_gate output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
   wire enable = ui_in[0];
 
-  // --- FIX: add async reset to flops so GLS never starts at X ---
+  // Async reset to flops so GLS never starts at X ---
   reg en_d;
   always @(posedge count_clk or negedge rst_n) begin
     if (!rst_n) en_d <= 1'b0;
@@ -90,7 +80,7 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
   assign uio_out[7:0] = (~enable) ? count[14:7] : 8'b0;
 
   // List all unused inputs to prevent warnings
-  wire dummy = &{ui_in, uio_in, ena, rst_n};
+  wire dummy = &{ui_in, uio_in, ena};
   wire _unused = &{clk, 1'b0};
 
 endmodule
