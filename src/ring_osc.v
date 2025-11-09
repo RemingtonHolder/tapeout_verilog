@@ -56,19 +56,19 @@ module tapped_ring (
     (* keep_hierarchy *) amm_inverter        start ( .a(   b0), .y(          b1) );
     (* keep_hierarchy *) inv_chain #(.N(1000))  c0 ( .a(   b1), .y(       b1001) );
     (* keep_hierarchy *) inv_chain #(.N(500))   c1 ( .a(b1001), .y(       b1501) );
-    (* keep_hierarchy *) inv_chain #(.N(500))   c2 ( .a(b1501), .y(       b2001) );
-    (* keep_hierarchy *) inv_chain #(.N(100))   c4 ( .a(b2001), .y(       b2101) );
-    (* keep_hierarchy *) inv_chain #(.N(100))   c5 ( .a(b2101), .y(       b2201) );
-    (* keep_hierarchy *) inv_chain #(.N(100))   c6 ( .a(b2201), .y(       b2301) );
-    (* keep_hierarchy *) inv_chain #(.N(100))   c7 ( .a(b2301), .y(       b2401) );
-    (* keep_hierarchy *) inv_chain #(.N(100))   c8 ( .a(b2401), .y(       b2501) );
+    (* keep_hierarchy *) inv_chain #(.N(300))   c2 ( .a(b1501), .y(       b1801) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c3 ( .a(b1801), .y(       b1901) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c4 ( .a(b1901), .y(       b2001) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c5 ( .a(b2001), .y(       b2101) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c6 ( .a(b2101), .y(       b2201) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c7 ( .a(b2201), .y(       b2301) );
     assign y =  tap == 0 ?   b1001:
                 tap == 1 ?   b1501:
-                tap == 2 ?   b2001:
-                tap == 3 ?   b2101:
-                tap == 4 ?   b2201:
-                tap == 5 ?   b2301:
-                tap == 6 ?   b2401:
-                /*tap==7*/   b2501;
+                tap == 2 ?   b1801:
+                tap == 3 ?   b1901:
+                tap == 4 ?   b2001:
+                tap == 5 ?   b2101:
+                tap == 6 ?   b2201:
+                /*tap==7*/   b2301;
     assign b0 = y;
 endmodule
