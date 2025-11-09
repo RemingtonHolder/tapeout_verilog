@@ -52,7 +52,7 @@ module tapped_ring (
     input [2:0] tap,
     output y
 );
-    wire b0, b1, b1001, b1501, b2001, b2601, b2701, b2801, b2901, b3001;
+    wire b0, b1, b1001, b1501, b2001, b2401, b2501, b2601, b2701, b2801;
     (* keep_hierarchy *) amm_inverter        start ( .a(   b0), .y(          b1) );
     (* keep_hierarchy *) inv_chain #(.N(1000))  c0 ( .a(   b1), .y(       b1001) );
     (* keep_hierarchy *) inv_chain #(.N(500))   c1 ( .a(b1001), .y(       b1501) );
