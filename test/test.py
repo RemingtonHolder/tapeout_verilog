@@ -7,7 +7,7 @@ from cocotb.triggers import ClockCycles
 
 
 # @cocotb.test()
-@cocotb.test(timeout_time=50, timeout_unit="ms")
+@cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
 
