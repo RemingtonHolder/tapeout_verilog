@@ -18,15 +18,6 @@ jobs:
         uses: TinyTapeout/tt-gds-action@ttsky25b
         with:
           pdk: sky130A
-          openlane-env: |
-            PNR_SDC_FILE=/github/workspace/src/constraints.sdc
-            SIGNOFF_SDC_FILE=/github/workspace/src/constraints.sdc
-            CLOCK_PORT=
-            RUN_CTS=0
-            PL_RESIZER_DESIGN_OPTIMIZATIONS=0
-            PL_RESIZER_BUFFER_INPUT_PORTS=0
-            PL_RESIZER_BUFFER_OUTPUT_PORTS=0
-            RSZ_DONT_TOUCH=1
 
   precheck:
     needs: gds
@@ -46,6 +37,8 @@ jobs:
 
       - name: GL test
         uses: TinyTapeout/tt-gds-action/gl_test@ttsky25b
+        with:
+          pdk: sky130A
 
   viewer:
     needs: gds
