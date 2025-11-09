@@ -10,11 +10,8 @@ module and_gate(
     input wire b,
     output wire y
 );
-  (* keep_hierarchy *) sky130_fd_sc_hd__and2_1 sky_and (
-    .A (a),
-    .B (b),
-    .X (y)
-  );
+
+  assign y = a & b;
  
 endmodule
 
