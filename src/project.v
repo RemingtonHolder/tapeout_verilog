@@ -35,7 +35,7 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
     if (SIM_BYPASS) begin : g_bypass
       // synthesis translate_off
       reg osc_r = 1'b0;
-      always #70 osc_r = ~osc_r;     // 70 ns half-period ≈ 7 MHz, safe for sim
+      always #5000 osc_r = ~osc_r;     // 70 ns half-period ≈ 7 MHz, safe for sim
       assign osc = osc_r;
       // synthesis translate_on
     end else begin : g_real
