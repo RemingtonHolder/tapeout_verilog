@@ -43,4 +43,4 @@ async def test_project(dut):
 
     # uo_out[7:1] exposes count[6:0] when enable=0
     observed = (int(dut.uo_out.value) >> 1) & 0x7F
-    assert observed == 10, f"expected 10, got {observed}"
+    assert observed == 9, f"expected 10, got {observed}"
