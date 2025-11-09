@@ -11,7 +11,7 @@ module amm_inverter (
     output  wire y
 );
 
-    assign y = ~a;
+    assign #1 y = ~a;
 
 endmodule
 
