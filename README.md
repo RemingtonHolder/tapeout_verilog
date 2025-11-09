@@ -2,12 +2,21 @@
 
 # Tiny Tapeout Ring Oscillator with Enable and Counter
 
-This repo contains the tiny tapeout verilog design of a ring oscillator with enable functionality and a built in 15-bit counter for tallying the number of oscillations
+This repo contains the tiny tapeout verilog design of a ring oscillator with enable functionality and a built in 15-bit counter for tallying the number of oscillations, and chain tap functionality.
 
-> [!NOTE]
-> The ring oscillator that sits at the center of this design was based upon that done by algofoogle in: [tt09-ring-osc](https://github.com/algofoogle/tt09-ring-osc)
+The ring oscillator that sits at the center of this design was based upon that done by algofoogle in: [tt09-ring-osc3](https://github.com/algofoogle/tt09-ring-osc3)
 
 - [Read the documentation for project](docs/info.md)
+
+> [!NOTE]
+> This variable tap ring oscillator with a built in counter and enable was made by a undergraduate project team at Vanderbilt Univerity through the Institute for Space and Defence Electronics.
+> Team Member Listed In Alphabetical Order:
+> Crystal Jiang
+> Jeda Williams
+> Julia Ke
+> Remington Holder
+> Rohin Kumar
+> Sherry Yu
 
 ## What is Tiny Tapeout?
 
