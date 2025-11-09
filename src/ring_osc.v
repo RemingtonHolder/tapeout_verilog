@@ -19,19 +19,6 @@
 // );
 // endmodule
 
-module enable_gate(
-    input wire a,
-    input wire b,
-    output wire y
-);
-  (* keep_hierarchy *) sky130_fd_sc_hd__nand2_1 sky_nand (
-    .A (a),
-    .B (b),
-    .Y (y)
-  );
- 
-endmodule
-
 module amm_inverter (
     input   wire a,
     output  wire y
@@ -65,23 +52,23 @@ module tapped_ring (
     input [2:0] tap,
     output y
 );
-    wire b0, b1, b11, b21, b31, b41, b51, b101, b301, b1001;
-    (* keep_hierarchy *) amm_inverter      start ( .a(  b0), .y(       b1) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c0 ( .a(  b1), .y(       b11) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c1 ( .a( b11), .y(       b21) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c2 ( .a( b21), .y(       b31) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c3 ( .a( b31), .y(       b41) );
-    (* keep_hierarchy *) inv_chain #(.N(10))  c4 ( .a( b41), .y(       b51) );
-    (* keep_hierarchy *) inv_chain #(.N(50))  c5 ( .a( b51), .y(      b101) );
-    (* keep_hierarchy *) inv_chain #(.N(200)) c6 ( .a(b101), .y(      b301) );
-    (* keep_hierarchy *) inv_chain #(.N(700)) c7 ( .a(b301), .y(     b1001) );
-    assign y =  tap == 0 ?   b11:
-                tap == 1 ?   b21:
-                tap == 2 ?   b31:
-                tap == 3 ?   b41:
-                tap == 4 ?   b51:
-                tap == 5 ?   b101:
-                tap == 6 ?   b301:
-                /*tap==7*/   b1001;
+    wire b0, b1, b1001, b1501, b2001, b2601, b2701, b2801, b2901, b3001;
+    (* keep_hierarchy *) amm_inverter        start ( .a(   b0), .y(          b1) );
+    (* keep_hierarchy *) inv_chain #(.N(1000))  c0 ( .a(   b1), .y(       b1001) );
+    (* keep_hierarchy *) inv_chain #(.N(500))   c1 ( .a(b1001), .y(       b1501) );
+    (* keep_hierarchy *) inv_chain #(.N(500))   c2 ( .a(b1501), .y(       b2001) );
+    (* keep_hierarchy *) inv_chain #(.N(600))   c3 ( .a(b2001), .y(       b2601) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c4 ( .a(b2601), .y(       b2701) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c5 ( .a(b2701), .y(       b2801) );
+    (* keep_hierarchy *) inv_chain #(.N(100))   c6 ( .a(b2801), .y(       b2901) );
+    (* keep_hierarchy *) inv_chain #(.N(500))   c7 ( .a(b2901), .y(       b3001) );
+    assign y =  tap == 0 ?   b1001:
+                tap == 1 ?   b1501:
+                tap == 2 ?   b2001:
+                tap == 3 ?   b2601:
+                tap == 4 ?   b2701:
+                tap == 5 ?   b2801:
+                tap == 6 ?   b2901:
+                /*tap==7*/   b3001;
     assign b0 = y;
 endmodule
