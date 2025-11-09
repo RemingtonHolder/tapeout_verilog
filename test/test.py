@@ -24,44 +24,23 @@ async def test_project(dut):
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
-
-    dut._log.info("Test project behavior")
-
-    # Set the input values you want to test
-    # dut.ui_in.value = 15
-    dut.ui_in.value = 1
-
-    # Wait for one clock cycle to see the output values
     await ClockCycles(dut.clk, 10)
 
-    # Set the input values you want to test
-    # dut.ui_in.value = 14
-    dut.ui_in.value = 0
+    dut._log.info("TESTING PROJECT BEHAVIOR")
 
-    # Wait for one clock cycle to see the output values
+    # Enter TEST MODE so counter uses tile clk: ui_in[7]=1
+    # bits: [7]=test_mode, [3:1]=tap, [0]=enable
+    dut.ui_in.value = 0b0001_0000  # test_mode=1, tap=0, enable=0
+    await ClockCycles(dut.clk, 1)
+
+    # Start counting (enable=1)
+    dut.ui_in.value = 0b0001_0001
     await ClockCycles(dut.clk, 10)
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uio_out.value == 55
+    # Stop counting
+    dut.ui_in.value = 0b0001_0000
+    await ClockCycles(dut.clk, 1)
 
-    # await ClockCycles(dut.clk, 1)
-
-    # # Set the input values you want to test
-    # dut.ui_in.value = 15
-
-    # # Wait for one clock cycle to see the output values
-    # await ClockCycles(dut.clk, 1)
-
-    # # Set the input values you want to test
-    # dut.ui_in.value = 14
-
-    # # Wait for one clock cycle to see the output values
-    # await ClockCycles(dut.clk, 1)
-
-    # # The following assersion is just an example of how to check the output values.
-    # # Change it to match the actual expected output of your module:
-    # assert dut.uio_out.value == 55
-
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    # uo_out[7:1] exposes count[6:0] when enable=0
+    observed = (int(dut.uo_out.value) >> 1) & 0x7F
+    assert observed == 10, f"expected 10, got {observed}"

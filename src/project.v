@@ -29,7 +29,11 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
 
   assign uio_oe = 8'b1111_1111;
 
+  wire test_mode = ui_in[4];
+
   wire osc, gated_osc;
+
+  wire count_clk = test_mode ? clk : osc;
 
   generate
     if (SIM_BYPASS) begin : g_bypass
@@ -62,23 +66,26 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
   // `endif
 
   and_gate output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
-  assign uo_out[0] = gated_osc;
-
   wire enable = ui_in[0];
 
-  reg en_d;                 // delay flop to detect rising edge
-  always @(posedge osc) en_d <= enable;
+  // --- FIX: add async reset to flops so GLS never starts at X ---
+  reg en_d;
+  always @(posedge count_clk or negedge rst_n) begin
+    if (!rst_n) en_d <= 1'b0;
+    else        en_d <= enable;
+  end
   wire en_rise = enable & ~en_d;
 
   reg [14:0] count = 15'b0;
 
-  always @(posedge osc) begin
-      if (en_rise)           count <= 15'b0;          // clear once on rising edge
-      else if (enable)       count <= count + 1'b1;  // count while enabled
-      else                   count <= count;         // hold when disabled
+  always @(posedge count_clk or negedge rst_n) begin
+    if (!rst_n)        count <= 15'd0;
+    else if (en_rise)  count <= 15'd0;
+    else if (enable)   count <= count + 15'd1;
   end
 
-  // Show the count whenever enable is low (your requirement)
+  
+  assign uo_out[0]   = (test_mode ? 1'b0 : (enable & gated_osc));  // quiet the RO pin in test mode
   assign uo_out[7:1] = (~enable) ? count[6:0] : 7'b0;
   assign uio_out[7:0] = (~enable) ? count[14:7] : 8'b0;
 
