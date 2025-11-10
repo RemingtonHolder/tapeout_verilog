@@ -59,7 +59,6 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
 
   always @(posedge count_clk or negedge rst_n) begin
     if (!rst_n)        count <= 15'd0;
-    else if (en_rise)  count <= 15'd0;
     else if (enable)   count <= count + 15'd1;
   end
 
