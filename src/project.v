@@ -6,16 +6,6 @@
 
 `default_nettype none
 
-module and_gate(
-    input wire a,
-    input wire b,
-    output wire y
-);
-
-  assign y = a & b;
- 
-endmodule
-
 module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -31,9 +21,11 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
 
   wire test_mode = ui_in[4];
 
-  wire osc, gated_osc;
+  wire osc;
 
   wire count_clk = test_mode ? clk : osc;
+
+  wire enable = ui_in[0];
 
   generate
     if (SIM_BYPASS) begin : g_bypass
@@ -50,13 +42,10 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
         assign osc = osc_r;
         // synthesis translate_on
       `else
-        tapped_ring u_ring (.tap(ui_in[3:1]), .y(osc));  // real ring for hardware
+        tapped_ring u_ring (.tap(ui_in[3:1]), .enable(enable) .y(osc));  // real ring for hardware
       `endif
     end
   endgenerate
-
-  and_gate output_gate ( .a(  osc), .b(ui_in[0]), .y(gated_osc));
-  wire enable = ui_in[0];
 
   // Async reset to flops so GLS never starts at X ---
   reg en_d;
@@ -70,12 +59,12 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
 
   always @(posedge count_clk or negedge rst_n) begin
     if (!rst_n)        count <= 15'd0;
-    else if (en_rise)  count <= 15'd0;
+    // else if (en_rise)  count <= 15'd0;
     else if (enable)   count <= count + 15'd1;
   end
 
   
-  assign uo_out[0]   = (test_mode ? 1'b0 : (enable & gated_osc));  // quiet the RO pin in test mode
+  assign uo_out[0]   = (test_mode ? 1'b0 : (enable & osc));  // quiet the RO pin in test mode
   assign uo_out[7:1] = (~enable) ? count[6:0] : 7'b0;
   assign uio_out[7:0] = (~enable) ? count[14:7] : 8'b0;
 

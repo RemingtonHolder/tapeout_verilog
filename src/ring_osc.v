@@ -15,6 +15,16 @@ module amm_inverter (
 
 endmodule
 
+// module nand_gate(
+//     input wire a,
+//     input wire b,
+//     output wire y
+// );
+
+//   assign y = ~(a & b);
+ 
+// endmodule
+
 // A chain of inverters.
 module inv_chain #(
     parameter N = 10 // SHOULD BE EVEN.
@@ -34,6 +44,7 @@ endmodule
 
 module tapped_ring (
     input [2:0] tap,
+    input enable,
     output y
 );
     wire b0, b1, b1001, b1501, b1601, b1701, b1801, b1901, b2001, b2101;
@@ -54,5 +65,5 @@ module tapped_ring (
                 tap == 5 ?   b1901:
                 tap == 6 ?   b2001:
                 /*tap==7*/   b2101;
-    assign b0 = y;
+    assign b0 = y & enable;
 endmodule
