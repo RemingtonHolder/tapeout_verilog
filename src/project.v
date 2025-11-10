@@ -42,7 +42,7 @@ module tt_um_ring_osc3 #(parameter SIM_BYPASS=0)(
         assign osc = osc_r;
         // synthesis translate_on
       `else
-        tapped_ring u_ring (.tap(ui_in[3:1]), .enable(enable) .y(osc));  // real ring for hardware
+        tapped_ring u_ring (.tap(ui_in[3:1]), .enable(enable), .y(osc));  // real ring for hardware
       `endif
     end
   endgenerate
